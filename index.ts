@@ -1,5 +1,6 @@
 import parse from 'rehype-parse'
 import rehypeStringify from 'rehype-stringify'
+import {removePosition} from 'unist-util-remove-position'
 import unified from 'unified'
 import { CONTINUE, EXIT, SKIP, visit, Visitor } from 'unist-util-visit'
 
@@ -56,8 +57,9 @@ function createMatcher(patterns: Pattern[], positive = true) {
   }) !== -1)
 }
 
-export function unihtml(html: string, handler: (context: Context) => void) {
-  const processor = unified().use(parse, { fragment: true }).use(rehypeStringify)
+const processor = unified().use(parse, { fragment: true }).use(rehypeStringify)
+
+export function unitree(html: string, handler: (context: Context) => void, keepPosition = true) {
   const tree = processor.parse(html)
   const context: Context = {
     custom: (test, visitor) => { visit(tree, test, visitor) },
@@ -126,8 +128,16 @@ export function unihtml(html: string, handler: (context: Context) => void) {
     }
   }
   handler(context)
+  if (!keepPosition) { removePosition(tree, true) }
+  return tree
+}
 
+export function unirender(tree: Node) {
   return processor.stringify(tree)
+}
+
+export function unihtml(html: string, handler: (context: Context) => void) {
+  return unirender(unitree(html, handler))
 }
 
 export { SKIP, EXIT, CONTINUE }
