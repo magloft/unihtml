@@ -7,6 +7,7 @@ module.exports = {
     '**/node_modules/**/*',
     `${root}/tsconfig.json`,
     `${root}/rollup.config.js`,
+    `${root}/snowpack.config.js`,
     `${root}/index.html`
   ]
 }
