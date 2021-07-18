@@ -33,7 +33,7 @@ export interface Node extends BaseNode {
   properties?: Data<string> & { className?: string[] }
 }
 
-export interface Parent extends BaseNode {
+export interface Parent extends Node {
   children: Node[]
 }
 
