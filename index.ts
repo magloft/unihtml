@@ -139,6 +139,10 @@ export function stringify(tree: Node) {
   return processor.stringify(tree)
 }
 
+export function stringifyChildren({ children }: Node) {
+  return stringify({ type: 'root', children })
+}
+
 export function unihtml(html: string, handler: (context: Context) => void) {
   const tree = parse(html)
   transform(tree, handler)
