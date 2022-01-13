@@ -3,6 +3,12 @@ import rehypeStringify from 'rehype-stringify'
 import {removePosition} from 'unist-util-remove-position'
 import unified from 'unified'
 import { CONTINUE, EXIT, SKIP, visit, Visitor } from 'unist-util-visit'
+import { toText } from 'hast-util-to-text'
+
+export interface TextifyOptions {
+  trim?: boolean
+  multiLine?: boolean
+}
 
 export interface Data<T = unknown> {
   [key: string]: T
@@ -141,6 +147,19 @@ export function stringify(tree: Node) {
 
 export function stringifyChildren({ children }: Node) {
   return stringify({ type: 'root', children })
+}
+
+export function textify(tree: Node, options: Partial<TextifyOptions> = {}) {
+  const { trim, multiLine }: TextifyOptions = { trim: true, multiLine: false, ...options }
+  let text = toText(tree as any)
+  text = text.replace(/ ?\n+ ?\n*/g, '\n')
+  if (!multiLine) { text = text.replace(/\n/g, ' ') }
+  if (trim) { text = text.replace(/ +/g, ' ').trim() }
+  return text
+}
+
+export function textifyChildren({ children }: Node) {
+  return textify({ type: 'root', children })
 }
 
 export function unihtml(html: string, handler: (context: Context) => void) {

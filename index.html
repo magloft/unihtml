@@ -21,7 +21,7 @@
     <code id="source"></code>
     <code id="target"></code>
     <script type="module">
-      import { unihtml } from '/index.js'
+      import { unihtml, parse, textify } from '/index.js'
       const source = `
         <div class="elementor">
           <div class="elementor-row">
@@ -42,6 +42,10 @@
         removeEmptyTags(['section'])
       })
       document.getElementById('target').textContent = target
+
+      const tree = parse(source)
+      const result = textify(tree, { multiLine: true })
+      debugger
     </script>
   </body>
 </html>
