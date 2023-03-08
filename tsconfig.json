@@ -1,20 +1,9 @@
 {
+  "extends": "@magloft/devkit-core/tsconfig.json",
   "compilerOptions": {
-    "module": "ES2020",
-    "moduleResolution": "node",
-    "target": "es6",
-    "jsx": "preserve",
-    "lib": ["dom", "es2015", "es2017"],
-    "strict": true,
-    "noEmit": false,
-    "declaration": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "removeComments": false
+    "outDir": "build/",
+    "rootDir": "src/"
   },
-  "include": ["./index.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
 }

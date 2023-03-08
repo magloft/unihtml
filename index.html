@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Starter Snowpack App" />
-    <title>UniHTML</title>
+    <title>unihtml</title>
     <style>
       code {
         display: block;
@@ -20,32 +19,6 @@
     <h1>Welcome to UniHTML!</h1>
     <code id="source"></code>
     <code id="target"></code>
-    <script type="module">
-      import { unihtml, parse, textify } from '/index.js'
-      const source = `
-        <div class="elementor">
-          <div class="elementor-row">
-            <div class="elementor-column"><p data-foobar="Hello World"><strong>First</strong> <strong>Line</strong></p></div>
-            <div class="elementor-column"><p>Second Line</p></div>
-          </div>
-          <div class="elementor-row">
-            <div class="elementor-column"><p>Third Line</p></div>
-            <div class="elementor-column"><p>Fourth Line</p></div>
-          </div>
-        </div>`
-      document.getElementById('source').textContent = source
-      const target = unihtml(source, ({ removeAttributes, unwrap, removeClassNames, clean, removeEmptyTags }) => {
-        removeAttributes([/^data/])
-        unwrap((node) => node.type === 'element' && node.tagName === 'div' && node.properties?.className?.findIndex((className) => /^elementor/.test(className)) !== -1)
-        removeClassNames([/^elementor/])
-        clean()
-        removeEmptyTags(['section'])
-      })
-      document.getElementById('target').textContent = target
-
-      const tree = parse(source)
-      const result = textify(tree, { multiLine: true })
-      debugger
-    </script>
+    <script type="module" src="src/example.ts"></script>
   </body>
 </html>
