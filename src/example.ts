@@ -1,6 +1,6 @@
 import { Element } from 'hast'
 import { is } from 'unist-util-is'
-import { parse, select, unihtml } from './index'
+import { parse, unihtml } from './index'
 
 function main() {
   const source = `
@@ -30,10 +30,7 @@ function main() {
   document.getElementById('target')!.textContent = target
 
   const tree = parse(source)
-  debugger
-  const node = select('.foobar', tree)
-  // const result = textify(tree, { multiLine: true })
-  debugger
+  console.info(tree)
 }
 
 main()

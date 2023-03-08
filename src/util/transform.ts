@@ -1,9 +1,8 @@
-import { Element, Node, Parent, Properties, Text } from 'hast'
+import { Node, Parent, Text } from 'hast'
 import { is, Test } from 'unist-util-is'
 import { removePosition } from 'unist-util-remove-position'
 import { CONTINUE, SKIP, visit, Visitor } from 'unist-util-visit'
-
-export type TestPredicate = (node: Node, index?: number, parent?: Parent) => boolean
+import { Element, Properties } from './types'
 
 export type Pattern = string | RegExp
 

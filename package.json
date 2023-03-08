@@ -18,8 +18,8 @@
     "build": "vite build",
     "watch": "vite build --watch --mode=development",
     "serve": "vite",
-    "prepack": "yarn build",
-    "lint": "eslint 'src/**/*.ts' 'src/**/*.tsx'"
+    "prepack": "yarn clean && yarn build",
+    "lint": "eslint 'src/**/*.ts'"
   },
   "dependencies": {
     "@magloft/unist-util-select": "^4.0.4",
