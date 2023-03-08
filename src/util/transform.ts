@@ -1,8 +1,7 @@
-import { Node, Parent, Text } from 'hast'
-import { is, Test } from 'unist-util-is'
+import { Test } from 'unist-util-is'
 import { removePosition } from 'unist-util-remove-position'
-import { CONTINUE, SKIP, visit, Visitor } from 'unist-util-visit'
-import { Element, Properties } from './types'
+import { CONTINUE, EXIT, SKIP, visit, Visitor } from 'unist-util-visit'
+import { isElement, isText, Node, Parent, Properties } from './element'
 
 export type Pattern = string | RegExp
 
@@ -31,7 +30,7 @@ export function transform(tree: Node, handler: (context: TransformContext) => vo
     removeEmptyTags: (patterns) => {
       const matcher = createMatcher(patterns)
       visit(tree, (node) => {
-        if (!is<Element>(node, 'element')) { return false }
+        if (!isElement(node)) { return false }
         if (!matcher(node.tagName)) { return false }
         return node.children == null || node.children.length === 0
       }, (_node, index, parent: Parent) => {
@@ -43,10 +42,10 @@ export function transform(tree: Node, handler: (context: TransformContext) => vo
     removeAttributes: (patterns) => {
       const matcher = createMatcher(patterns)
       visit(tree, (node) => {
-        if (!is<Element>(node, 'element') || !node.properties) { return false }
+        if (!isElement(node) || !node.properties) { return false }
         return Object.keys(node.properties).findIndex(matcher) !== -1
       }, (node, index: number | null, parent: Parent | null) => {
-        if (!is<Element>(node, 'element') || node.properties == null || index === null || parent === null) { return }
+        if (!isElement(node) || node.properties == null || index === null || parent === null) { return }
         node.properties = Object.entries(node.properties ?? {}).reduce<Properties>((obj, [name, value]) => {
           if (!matcher(name)) { obj[name] = value }
           return obj
@@ -57,10 +56,10 @@ export function transform(tree: Node, handler: (context: TransformContext) => vo
     removeClassNames: (patterns) => {
       const matcher = createMatcher(patterns, false)
       visit(tree, (node) => {
-        if (!is<Element>(node, 'element') || !node.properties?.className) { return false }
+        if (!isElement(node) || !node.properties?.className) { return false }
         return node.properties.className.findIndex(matcher) === -1
       }, (node: Node, index: number | null, parent: Parent | null) => {
-        if (!is<Element>(node, 'element') || !node.properties?.className || index === null || !parent) { return }
+        if (!isElement(node) || !node.properties?.className || index === null || !parent) { return }
         node.properties.className = node.properties.className.filter(matcher)
         if (node.properties.className.length === 0) { delete node.properties.className }
         return [CONTINUE]
@@ -76,7 +75,7 @@ export function transform(tree: Node, handler: (context: TransformContext) => vo
     },
     clean: () => {
       visit(tree, (node) => {
-        if (!is<Text>(node, 'text')) { return false }
+        if (!isText(node)) { return false }
         if (!node.value) { return true }
         if (node.value === ' ') { return false }
         return node.value != null && node.value.trim().length === 0
@@ -97,3 +96,5 @@ function createMatcher(patterns: Pattern[], positive = true) {
     return ((pattern instanceof RegExp) ? pattern.test(needle) : needle === pattern) === positive
   }) !== -1)
 }
+
+export { CONTINUE, EXIT, SKIP }

@@ -1,5 +1,5 @@
-import { Parent } from 'hast'
 import { toText } from 'hast-util-to-text'
+import { Parent } from './element'
 
 export interface TextifyOptions {
   trim?: boolean

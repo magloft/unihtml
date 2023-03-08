@@ -1,8 +1,7 @@
-import { Parent } from 'hast'
 import rehypeParse from 'rehype-parse'
-import { Root } from 'rehype-parse/lib'
 import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'
+import { Parent, Root } from './element'
 
 const processor = unified().use(rehypeParse, { fragment: true }).use(rehypeStringify)
 
